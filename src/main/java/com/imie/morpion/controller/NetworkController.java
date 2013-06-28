@@ -26,6 +26,8 @@ public abstract class NetworkController extends Thread implements BoardListener 
    private InputStream input;
    private ObjectOutputStream output;
 
+   protected boolean locked;
+
    protected NetworkController(Game game, SquareState player, String id, Socket socket) throws IOException {
       this.game = game;
       this.player = player;
@@ -33,6 +35,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
       this.socket = socket;
       this.input = this.socket.getInputStream();
       this.output = new ObjectOutputStream(this.socket.getOutputStream());
+      this.locked = false;
    }
 
    @Override
@@ -52,7 +55,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
                } catch (ClassNotFoundException ex) {
                   Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
                }
-               // TODO: unlock
+               this.locked = false;
             } else if (line.startsWith("BYE")) {
                this.socket.close();
             }
@@ -81,7 +84,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
          this.output.writeObject(play);
          this.output.flush();
          this.game.play(play);
-         // TODO: lock
+         this.locked = true;
       } catch (IOException ex) {
          Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -101,6 +104,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
 
    @Override
    public void onClick(int x, int y) {
-      play(x, y);
+      if (!this.locked)
+         play(x, y);
    }
 }
