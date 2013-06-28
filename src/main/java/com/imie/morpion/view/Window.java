@@ -15,8 +15,8 @@ public class Window extends JFrame implements GameListener {
    private ScoresPanel scores;
    private Board board;
 
-   public Window(Game game, BoardListener boardListener) throws Exception {
-      super("Morpion");
+   public Window(Game game, BoardListener boardListener, String title) throws Exception {
+      super("Morpion " + title);
 
       String[] lookAndFeels = {
             "com.sun.java.swing.plaf.gtk.GTKLookAndFeel",

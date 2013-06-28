@@ -22,4 +22,15 @@ public enum SquareState {
    public String toString() {
       return this.value;
    }
+
+   public SquareState getOtherPlayer() {
+      switch (this) {
+         case P1:
+            return P2;
+         case P2:
+            return P1;
+         default:
+            return null;
+      }
+   }
 }

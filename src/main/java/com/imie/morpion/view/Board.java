@@ -33,21 +33,28 @@ public class Board extends JPanel {
          b.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                 for(BoardListener l : listeners) {
-                    if(l != null) {
-                       l.onClick(j / 3, j % 3);
-                    }
-                 }
+               for (BoardListener l : listeners) {
+                  if (l != null) {
+                     l.onClick(j / 3, j % 3);
+                  }
+               }
             }
 
             @Override
-            public void mousePressed(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+            }
+
             @Override
-            public void mouseReleased(MouseEvent e) {}
+            public void mouseReleased(MouseEvent e) {
+            }
+
             @Override
-            public void mouseEntered(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {
+            }
+
             @Override
-            public void mouseExited(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {
+            }
          });
 
          buttons[i / 3][i % 3] = b;
@@ -64,6 +71,7 @@ public class Board extends JPanel {
    public void addListener(BoardListener l) {
       listeners.add(l);
    }
+
    public void removeListener(BoardListener l) {
       listeners.remove(l);
    }
