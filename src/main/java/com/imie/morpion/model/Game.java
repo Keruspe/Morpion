@@ -28,10 +28,6 @@ public class Game {
       this.listeners = new ArrayList<ViewListener>();
       this.players = new HashMap<String, SquareState>();
 
-      /* FIXME: this is temporary */
-      this.players.put("server", SquareState.P1);
-      this.players.put("client", SquareState.P2);
-
       this.score1 = 0;
       this.score2 = 0;
       this.state = GameState.P1_TURN;
@@ -62,6 +58,10 @@ public class Game {
       for (ViewListener listener : this.listeners) {
          listener.onViewChanged();
       }
+   }
+
+   public void join(String id, SquareState player) {
+      this.players.put(id, player);
    }
 
    public void play(Play play) {

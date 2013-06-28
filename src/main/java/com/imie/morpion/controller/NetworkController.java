@@ -2,6 +2,7 @@ package com.imie.morpion.controller;
 
 import com.imie.morpion.model.Game;
 import com.imie.morpion.model.Play;
+import com.imie.morpion.model.SquareState;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,12 +19,16 @@ import java.util.logging.Logger;
 public abstract class NetworkController extends Thread {
 
    private Game game;
+   private SquareState player;
+   private String id;
    private Socket socket;
    private InputStream input;
    private ObjectOutputStream output;
 
-   protected NetworkController(Game game, Socket socket) throws IOException {
+   protected NetworkController(Game game, SquareState player, String id, Socket socket) throws IOException {
       this.game = game;
+      this.player = player;
+      this.id = id;
       this.socket = socket;
       this.input = this.socket.getInputStream();
       this.output = new ObjectOutputStream(this.socket.getOutputStream());
@@ -36,7 +41,9 @@ public abstract class NetworkController extends Thread {
          String line;
          while (this.socket.isConnected()) {
             line = input.readUTF();
-            if (line.startsWith("PLAY")) {
+            if (line.startsWith("JOIN")) {
+               this.game.join(input.readUTF(), this.player);
+            } else if (line.startsWith("PLAY")) {
                Play play = null;
                try {
                   play = (Play) input.readObject();
@@ -54,7 +61,18 @@ public abstract class NetworkController extends Thread {
       }
    }
 
-   public void play(Play play) {
+   public void joinGame() {
+      try {
+         this.output.writeUTF("JOIN");
+         this.output.writeUTF(id);
+         this.output.flush();
+      } catch (IOException ex) {
+         Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
+      }
+   }
+
+   public void play(int x, int y) {
+      Play play = new Play(this.id, x, y);
       try {
          this.output.writeUTF("PLAY");
          this.output.writeObject(play);
