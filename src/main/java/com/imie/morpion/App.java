@@ -22,7 +22,7 @@ public class App {
       nc.start();
       nc.joinGame();
 
-      Window window = new Window(game);
+      Window window = new Window(game, nc);
       window.setVisible(true);
    }
 }

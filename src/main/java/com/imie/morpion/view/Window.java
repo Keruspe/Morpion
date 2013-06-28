@@ -1,5 +1,6 @@
 package com.imie.morpion.view;
 
+import com.imie.morpion.controller.BoardListener;
 import com.imie.morpion.controller.ViewListener;
 import com.imie.morpion.model.Game;
 
@@ -15,7 +16,7 @@ public class Window extends JFrame implements ViewListener {
    private ScoresPanel scores;
    private Board board;
 
-   public Window(Game game) throws Exception {
+   public Window(Game game, BoardListener boardListener) throws Exception {
       super("Morpion");
 
       String[] lookAndFeels = {
@@ -46,6 +47,7 @@ public class Window extends JFrame implements ViewListener {
       this.add(scores, BorderLayout.PAGE_START);
 
       this.board = new Board(500, 500);
+      this.board.addListener(boardListener);
       this.add(board);
 
       this.refresh();

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
  */
 
-public abstract class NetworkController extends Thread {
+public abstract class NetworkController extends Thread implements BoardListener {
 
    private Game game;
    private SquareState player;
@@ -92,5 +92,10 @@ public abstract class NetworkController extends Thread {
       } catch (IOException ex) {
          Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
       }
+   }
+
+   @Override
+   public void onClick(int x, int y) {
+      play(x, y);
    }
 }
