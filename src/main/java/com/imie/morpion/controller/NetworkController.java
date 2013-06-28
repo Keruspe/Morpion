@@ -52,7 +52,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
                } catch (ClassNotFoundException ex) {
                   Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
                }
-               // TODO: apply + unlock
+               // TODO: unlock
             } else if (line.startsWith("BYE")) {
                this.socket.close();
             }
