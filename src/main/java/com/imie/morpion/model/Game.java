@@ -1,14 +1,13 @@
 package com.imie.morpion.model;
 
-import com.imie.morpion.controller.ViewListener;
 import com.imie.morpion.exception.NonEmptySquareException;
 import com.imie.morpion.exception.WrongPlayerException;
+import com.imie.morpion.view.GameListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 /**
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
 
 public class Game {
 
-   public List<ViewListener> listeners;
+   public List<GameListener> listeners;
 
    private int score1;
    private int score2;
@@ -27,7 +26,7 @@ public class Game {
    private Map<String, SquareState> players;
 
    public Game() {
-      this.listeners = new ArrayList<ViewListener>();
+      this.listeners = new ArrayList<GameListener>();
       this.players = new HashMap<String, SquareState>();
 
       this.score1 = 0;
@@ -52,12 +51,12 @@ public class Game {
       return score2;
    }
 
-   public void subscribe(ViewListener listener) {
+   public void subscribe(GameListener listener) {
       this.listeners.add(listener);
    }
 
    public void notifAll() {
-      for (ViewListener listener : this.listeners) {
+      for (GameListener listener : this.listeners) {
          listener.onViewChanged();
       }
    }
