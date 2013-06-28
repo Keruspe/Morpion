@@ -1,7 +1,6 @@
 package com.imie.morpion.view;
 
 import com.imie.morpion.controller.BoardListener;
-import com.imie.morpion.controller.ViewListener;
 import com.imie.morpion.model.Game;
 
 import javax.swing.*;
@@ -10,7 +9,7 @@ import java.awt.*;
 /**
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
  */
-public class Window extends JFrame implements ViewListener {
+public class Window extends JFrame implements GameListener {
 
    private Game game;
    private ScoresPanel scores;

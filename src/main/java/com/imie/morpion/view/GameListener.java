@@ -1,10 +1,10 @@
-package com.imie.morpion.controller;
+package com.imie.morpion.view;
 
 /**
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
  */
 
-public interface ViewListener {
+public interface GameListener {
 
    void onViewChanged();
 }
