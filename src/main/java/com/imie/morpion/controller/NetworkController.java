@@ -26,7 +26,8 @@ public abstract class NetworkController extends Thread implements BoardListener,
    private InputStream input;
    private ObjectOutputStream output;
 
-   protected boolean locked;
+   private boolean locked;
+   private Object mutex = new Object();
 
    protected NetworkController(Game game, SquareState player, String id, Socket socket) throws IOException {
       this.game = game;
@@ -36,7 +37,7 @@ public abstract class NetworkController extends Thread implements BoardListener,
       this.socket = socket;
       this.input = this.socket.getInputStream();
       this.output = new ObjectOutputStream(this.socket.getOutputStream());
-      this.locked = false;
+      this.unlock();
    }
 
    @Override
@@ -56,7 +57,7 @@ public abstract class NetworkController extends Thread implements BoardListener,
                } catch (ClassNotFoundException ex) {
                   Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
                }
-               this.locked = false;
+               this.unlock();
             } else if (line.startsWith("BYE")) {
                this.socket.close();
             }
@@ -86,7 +87,7 @@ public abstract class NetworkController extends Thread implements BoardListener,
          this.output.writeObject(play);
          this.output.flush();
          this.game.play(play);
-         this.locked = true;
+         this.lock();
       } catch (IOException ex) {
          Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -104,6 +105,20 @@ public abstract class NetworkController extends Thread implements BoardListener,
       }
    }
 
+   private void setLocked(boolean locked) {
+      synchronized (mutex) {
+         this.locked = locked;
+      }
+   }
+
+   protected void lock() {
+      this.setLocked(true);
+   }
+
+   private void unlock() {
+      this.setLocked(false);
+   }
+
    @Override
    public void onClick(int x, int y) {
       if (!this.locked)
@@ -112,6 +127,10 @@ public abstract class NetworkController extends Thread implements BoardListener,
 
    @Override
    public void onGameEnd() {
-      this.locked = (this.player != SquareState.P1);
+      if (this.player == SquareState.P1)
+         this.unlock();
+      else
+         this.lock();
+
    }
 }

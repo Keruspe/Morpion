@@ -15,6 +15,6 @@ public class NetworkClient extends NetworkController {
 
    public NetworkClient(Game game, String id) throws IOException {
       super(game, SquareState.P2, id, new Socket(InetAddress.getByName("localhost"), 4242));
-      this.locked = true;
+      this.lock();
    }
 }

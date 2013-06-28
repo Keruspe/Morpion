@@ -33,11 +33,6 @@ public class Board extends JPanel {
          b.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-               for (BoardListener l : listeners) {
-                  if (l != null) {
-                     l.onClick(j / 3, j % 3);
-                  }
-               }
             }
 
             @Override
@@ -46,6 +41,11 @@ public class Board extends JPanel {
 
             @Override
             public void mouseReleased(MouseEvent e) {
+               for (BoardListener l : listeners) {
+                  if (l != null) {
+                     l.onClick(j / 3, j % 3);
+                  }
+               }
             }
 
             @Override
