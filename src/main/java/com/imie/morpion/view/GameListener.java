@@ -10,5 +10,5 @@ public interface GameListener {
 
    void onSquaresUpdate(SquareState[][] squares);
 
-   void onStateUpdate(int score1, int score2);
+   void onStateUpdate(int scoreMe, int scoreOther);
 }
