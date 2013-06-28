@@ -1,6 +1,6 @@
 package com.imie.morpion.view;
 
-import com.imie.morpion.Game;
+import com.imie.morpion.model.Game;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,6 +12,7 @@ public class Window extends JFrame {
 
    private Game game;
    private ScoresPanel scores;
+   private Board board;
 
    public Window(Game game) throws Exception {
       super("Morpion");
@@ -40,7 +41,10 @@ public class Window extends JFrame {
       this.setSize(new Dimension(1220, 820));
 
       this.scores = new ScoresPanel();
-      this.add(scores);
+      this.add(scores, BorderLayout.PAGE_START);
+
+      this.board = new Board(500, 500);
+      this.add(board);
 
       this.refresh();
    }
@@ -58,5 +62,6 @@ public class Window extends JFrame {
 
    public void refresh() {
       this.scores.refresh(this.game.score1, this.game.score2);
+      this.board.refresh(this.game.squares);
    }
 }
