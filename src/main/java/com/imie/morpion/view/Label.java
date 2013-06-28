@@ -10,9 +10,13 @@ import java.awt.*;
 
 public class Label extends JLabel {
 
-   public Label(String text) {
+   public Label(String text, int width) {
       super(text, CENTER);
-      this.setPreferredSize(new Dimension(75, 30));
+      this.setPreferredSize(new Dimension(width, 30));
       this.setBorder(new EmptyBorder(5, 5, 5, 5));
+   }
+
+   public Label(String text) {
+      this(text, 75);
    }
 }

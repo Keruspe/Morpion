@@ -46,7 +46,6 @@ public class Game {
       for (int i = 0; i < 9; i++) {
          squares[i / 3][i % 3] = SquareState.EMPTY;
       }
-      this.onStateUpdate();
       this.onEndGame();
    }
 
@@ -70,9 +69,20 @@ public class Game {
       }
    }
 
+   private boolean myTurn() {
+      switch (state) {
+         case P1_TURN:
+            return this.me == SquareState.P1;
+         case P2_TURN:
+            return this.me == SquareState.P2;
+         default:
+            return false;
+      }
+   }
+
    public void onStateUpdate() {
       for (GameListener l : this.listeners) {
-         l.onStateUpdate(this.scoreMe, this.scoreOther);
+         l.onStateUpdate(this.scoreMe, this.scoreOther, myTurn());
       }
    }
 
@@ -112,6 +122,7 @@ public class Game {
             break;
       }
 
+      this.onStateUpdate();
       this.onSquaresUpdate();
       return true;
    }
