@@ -3,6 +3,7 @@ package com.imie.morpion.controller;
 import com.imie.morpion.model.Play;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -13,27 +14,29 @@ import java.util.logging.Logger;
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
  */
 
-public abstract class NetworkController implements Runnable {
+public abstract class NetworkController extends Thread {
 
-   protected Socket socket;
-   protected ObjectInputStream input;
-   protected ObjectOutputStream output;
+   private Socket socket;
+   private InputStream input;
+   private ObjectOutputStream output;
 
-   protected NetworkController() {
+   protected NetworkController(Socket socket) throws IOException {
+      this.socket = socket;
+      this.input = this.socket.getInputStream();
+      this.output = new ObjectOutputStream(this.socket.getOutputStream());
    }
 
    @Override
    public void run() {
-      this.openSocket();
-
       try {
+         ObjectInputStream input = new ObjectInputStream(this.input);
          String line;
          while (this.socket.isConnected()) {
-            line = this.input.readUTF();
-            if (line.startsWith("PLAY ")) {
+            line = input.readUTF();
+            if (line.startsWith("PLAY")) {
                Play play = null;
                try {
-                  play = (Play) this.input.readObject();
+                  play = (Play) input.readObject();
                } catch (ClassNotFoundException ex) {
                   Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
                }
@@ -58,7 +61,7 @@ public abstract class NetworkController implements Runnable {
       }
    }
 
-   void quit() {
+   public void quit() {
       try {
          this.output.writeUTF("BYE");
          this.output.flush();
@@ -67,6 +70,4 @@ public abstract class NetworkController implements Runnable {
          Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
       }
    }
-
-   protected abstract void openSocket();
 }
