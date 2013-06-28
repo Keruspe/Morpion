@@ -1,7 +1,7 @@
 package com.imie.morpion.view;
 
 import com.imie.morpion.controller.BoardListener;
-import com.imie.morpion.model.Game;
+import com.imie.morpion.model.SquareState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,11 +11,10 @@ import java.awt.*;
  */
 public class Window extends JFrame implements GameListener {
 
-   private Game game;
    private ScoresPanel scores;
    private Board board;
 
-   public Window(Game game, BoardListener boardListener, String title) throws Exception {
+   public Window(String title) throws Exception {
       super("Morpion " + title);
 
       String[] lookAndFeels = {
@@ -35,9 +34,6 @@ public class Window extends JFrame implements GameListener {
          throw new Exception("No LookAndFeel");
       }
 
-      this.game = game;
-      game.subscribe(this);
-
       this.setLayout(new BorderLayout());
       this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
       this.setSize(new Dimension(1220, 820));
@@ -46,11 +42,11 @@ public class Window extends JFrame implements GameListener {
       this.add(scores, BorderLayout.PAGE_START);
 
       this.board = new Board(500, 500);
-      this.board.addListener(boardListener);
       this.add(board);
+   }
 
-      this.scores.refresh(this.game.getScore1(), this.game.getScore2());
-      this.board.refresh(this.game.getSquares());
+   public void addBoardListener(BoardListener listener) {
+      this.board.addListener(listener);
    }
 
    private Boolean checkLookAndFeel(String name) {
@@ -64,17 +60,13 @@ public class Window extends JFrame implements GameListener {
       }
    }
 
-   public void refresh() {
-
+   @Override
+   public void onSquaresUpdate(SquareState[][] squares) {
+      this.board.refresh(squares);
    }
 
    @Override
-   public void onSquaresUpdate() {
-      this.board.refresh(this.game.getSquares());
-   }
-
-   @Override
-   public void onStateUpdate() {
-      this.scores.refresh(this.game.getScore1(), this.game.getScore2());
+   public void onStateUpdate(int score1, int score2) {
+      this.scores.refresh(score1, score2);
    }
 }

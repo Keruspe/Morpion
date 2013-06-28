@@ -16,17 +16,20 @@ import java.util.UUID;
 public class App {
 
    public static void main(String[] args) throws Exception {
-      Game game = new Game();
+      boolean server = (args.length == 1 && args[0].compareTo("--server") == 0);
       String id = UUID.randomUUID().toString();
 
-      boolean server = (args.length == 1 && args[0].compareTo("--server") == 0);
-      final NetworkController nc = (server) ? new NetworkServer(game, id) : new NetworkClient(game, id);
-
-      Window window = new Window(game, nc, (server) ? "server" : "client");
+      Window window = new Window((server) ? "server" : "client");
       window.setVisible(true);
 
+      Game game = new Game();
+      game.addGameListener(window);
+
+      final NetworkController nc = (server) ? new NetworkServer(game, id) : new NetworkClient(game, id);
       nc.start();
       nc.joinGame();
+
+      window.addBoardListener(nc);
       window.addWindowListener(new WindowAdapter() {
          public void windowClosing(WindowEvent winEvt) {
             nc.quit();

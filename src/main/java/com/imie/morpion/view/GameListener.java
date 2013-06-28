@@ -1,10 +1,14 @@
 package com.imie.morpion.view;
 
+import com.imie.morpion.model.SquareState;
+
 /**
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
  */
 
 public interface GameListener {
-   void onSquaresUpdate();
-   void onStateUpdate();
+
+   void onSquaresUpdate(SquareState[][] squares);
+
+   void onStateUpdate(int score1, int score2);
 }

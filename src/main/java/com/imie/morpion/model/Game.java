@@ -24,8 +24,8 @@ public class Game {
    private Map<String, SquareState> players;
 
    public Game() {
-      this.listeners = new ArrayList<GameListener>();
-      this.players = new HashMap<String, SquareState>();
+      this.listeners = new ArrayList<>();
+      this.players = new HashMap<>();
 
       this.score1 = 0;
       this.score2 = 0;
@@ -37,30 +37,19 @@ public class Game {
       }
    }
 
-   public SquareState[][] getSquares() {
-      return this.squares;
-   }
-
-   public int getScore1() {
-      return score1;
-   }
-
-   public int getScore2() {
-      return score2;
-   }
-
-   public void subscribe(GameListener listener) {
+   public void addGameListener(GameListener listener) {
       this.listeners.add(listener);
    }
 
    public void onSquaresUpdate() {
-      for(GameListener l : listeners) {
-         l.onSquaresUpdate();
+      for (GameListener l : this.listeners) {
+         l.onSquaresUpdate(this.squares);
       }
    }
+
    public void onStateUpdate() {
-      for(GameListener l : listeners) {
-         l.onStateUpdate();
+      for (GameListener l : this.listeners) {
+         l.onStateUpdate(this.score1, this.score2);
       }
    }
 
