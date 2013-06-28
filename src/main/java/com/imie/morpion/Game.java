@@ -5,4 +5,12 @@ package com.imie.morpion;
  */
 
 public class Game {
+
+   public int score1;
+   public int score2;
+
+   public Game() {
+      this.score1 = 0;
+      this.score2 = 0;
+   }
 }

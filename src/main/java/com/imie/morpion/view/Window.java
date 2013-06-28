@@ -1,16 +1,19 @@
-package com.imie.morpion;
+package com.imie.morpion.view;
+
+import com.imie.morpion.Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
  */
 public class Window extends JFrame {
 
-   public Window() throws Exception {
+   private Game game;
+   private ScoresPanel scores;
+
+   public Window(Game game) throws Exception {
       super("Morpion");
 
       String[] lookAndFeels = {
@@ -30,9 +33,16 @@ public class Window extends JFrame {
          throw new Exception("No LookAndFeel");
       }
 
+      this.game = game;
+
       this.setLayout(new BorderLayout());
       this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
       this.setSize(new Dimension(1220, 820));
+
+      this.scores = new ScoresPanel();
+      this.add(scores);
+
+      this.refresh();
    }
 
    private Boolean checkLookAndFeel(String name) {
@@ -46,7 +56,7 @@ public class Window extends JFrame {
       }
    }
 
-   public void refresh(Game game) {
-
+   public void refresh() {
+      this.scores.refresh(this.game.score1, this.game.score2);
    }
 }
