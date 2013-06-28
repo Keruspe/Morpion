@@ -31,6 +31,7 @@ public abstract class NetworkController extends Thread implements BoardListener,
 
    protected NetworkController(Game game, SquareState player, String id, Socket socket) throws IOException {
       this.game = game;
+      this.game.addGameListener(this);
       this.player = player;
       this.id = id;
       this.socket = socket;
@@ -106,6 +107,7 @@ public abstract class NetworkController extends Thread implements BoardListener,
 
    @Override
    public void onClick(int x, int y) {
+      Logger.getAnonymousLogger().info(this.locked + "");
       if (!this.locked)
          play(x, y);
    }
