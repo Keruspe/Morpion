@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,9 +54,11 @@ public abstract class NetworkController extends Thread {
                }
                // TODO: apply + unlock
             } else if (line.startsWith("BYE")) {
-               // TODO: quit
+               this.socket.close();
             }
          }
+      } catch (SocketException e) {
+         Logger.getLogger(NetworkController.class.getName()).info("Disconnected");
       } catch (IOException ex) {
          Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -85,12 +88,14 @@ public abstract class NetworkController extends Thread {
    }
 
    public void quit() {
-      try {
-         this.output.writeUTF("BYE");
-         this.output.flush();
-         this.output.close();
-      } catch (IOException ex) {
-         Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
+      if (this.socket.isConnected()) {
+         try {
+            this.output.writeUTF("BYE");
+            this.output.flush();
+            this.output.close();
+            this.socket.close();
+         } catch (IOException ex) {
+         }
       }
    }
 }

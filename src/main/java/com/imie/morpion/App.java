@@ -6,6 +6,8 @@ import com.imie.morpion.controller.NetworkServer;
 import com.imie.morpion.model.Game;
 import com.imie.morpion.view.Window;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.UUID;
 
 /**
@@ -18,11 +20,16 @@ public class App {
       String id = UUID.randomUUID().toString();
 
       boolean server = (args.length == 1 && args[0].compareTo("--server") == 0);
-      NetworkController nc = (server) ? new NetworkServer(game, id) : new NetworkClient(game, id);
+      final NetworkController nc = (server) ? new NetworkServer(game, id) : new NetworkClient(game, id);
       nc.start();
       nc.joinGame();
 
       Window window = new Window(game);
       window.setVisible(true);
+      window.addWindowListener(new WindowAdapter() {
+         public void windowClosing(WindowEvent winEvt) {
+            nc.quit();
+         }
+      });
    }
 }
