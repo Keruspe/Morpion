@@ -29,12 +29,17 @@ public class Game {
 
       this.score1 = 0;
       this.score2 = 0;
-      this.state = GameState.P1_TURN;
 
       squares = new SquareState[3][3];
+      reset();
+   }
+
+   public void reset() {
+      this.state = GameState.P1_TURN;
       for (int i = 0; i < 9; i++) {
          squares[i / 3][i % 3] = SquareState.EMPTY;
       }
+      this.onStateUpdate();
    }
 
    public SquareState[][] getSquares() {
@@ -78,13 +83,28 @@ public class Game {
          squares[play.x][play.y] = player;
       }
 
-      this.onSquaresUpdate();
       calculateState();
+
+      switch(state) {
+         case P1_WIN:
+            score1++;
+            reset();
+            break;
+         case P2_WIN:
+            score2++;
+            reset();
+            break;
+         case TIE:
+            reset();
+            break;
+      }
+
+      this.onSquaresUpdate();
    }
 
    private void calculateState() {
       for (int i = 0; i < 3; i++) {
-         /* Horizontal check */
+      /* Horizontal check */
          if (squares[0][i] == SquareState.P1 && squares[1][i] == SquareState.P1 && squares[2][i] == SquareState.P1) {
             state = GameState.P1_WIN;
             return;
@@ -92,7 +112,7 @@ public class Game {
             state = GameState.P2_WIN;
             return;
          }
-         /* Vertical check */
+      /* Vertical check */
          else if (squares[i][0] == SquareState.P1 && squares[i][1] == SquareState.P1 && squares[i][2] == SquareState.P1) {
             state = GameState.P1_WIN;
             return;
@@ -138,7 +158,5 @@ public class Game {
       } else {
          state = GameState.P1_TURN;
       }
-
-      this.onStateUpdate();
    }
 }
