@@ -1,5 +1,6 @@
 package com.imie.morpion;
 
+import com.imie.morpion.model.Game;
 import com.imie.morpion.view.Window;
 
 /**
