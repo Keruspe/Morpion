@@ -87,7 +87,8 @@ public abstract class NetworkController extends Thread implements BoardListener,
          this.output.writeUTF("PLAY");
          this.output.writeObject(play);
          this.output.flush();
-         this.game.play(play);
+         if (!this.game.play(play))
+            this.unlock();
       } catch (IOException ex) {
          Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
       }

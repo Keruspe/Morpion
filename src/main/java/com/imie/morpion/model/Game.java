@@ -80,9 +80,9 @@ public class Game {
       this.players.put(id, player);
    }
 
-   public void play(Play play) {
+   public boolean play(Play play) {
       if (squares[play.x][play.y] != SquareState.EMPTY)
-         return;
+         return false;
 
       SquareState player = this.players.get(play.player);
       if ((state == GameState.P1_TURN && player == SquareState.P1)
@@ -113,6 +113,7 @@ public class Game {
       }
 
       this.onSquaresUpdate();
+      return true;
    }
 
    private void calculateState() {
