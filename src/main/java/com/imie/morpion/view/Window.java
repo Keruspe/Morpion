@@ -12,6 +12,7 @@ public class Window extends JFrame {
 
    private Game game;
    private ScoresPanel scores;
+   private Board board;
 
    public Window(Game game) throws Exception {
       super("Morpion");
@@ -40,7 +41,10 @@ public class Window extends JFrame {
       this.setSize(new Dimension(1220, 820));
 
       this.scores = new ScoresPanel();
-      this.add(scores);
+      this.add(scores, BorderLayout.PAGE_START);
+
+      this.board = new Board();
+      this.add(board);
 
       this.refresh();
    }
