@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
@@ -68,11 +69,10 @@ public class Game {
    public void play(Play play) {
       if (squares[play.x][play.y].equals(SquareState.EMPTY)) {
          SquareState player = this.players.get(play.player);
-         if(state.equals(GameState.P1_TURN) && player.equals(SquareState.P1)
-         || state.equals(GameState.P2_TURN) && player.equals(SquareState.P2)) {
+         if (state.equals(GameState.P1_TURN) && player.equals(SquareState.P1)
+               || state.equals(GameState.P2_TURN) && player.equals(SquareState.P2)) {
             squares[play.x][play.y] = player;
-         }
-         else {
+         } else {
             throw new WrongPlayerException();
          }
       } else {

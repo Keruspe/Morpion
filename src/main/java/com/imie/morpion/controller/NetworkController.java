@@ -43,7 +43,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
          while (this.socket.isConnected()) {
             line = input.readUTF();
             if (line.startsWith("JOIN")) {
-               this.game.join(input.readUTF(), this.player);
+               this.game.join(line.split(" ")[1], this.player.getOtherPlayer());
             } else if (line.startsWith("PLAY")) {
                Play play = null;
                try {
@@ -66,9 +66,9 @@ public abstract class NetworkController extends Thread implements BoardListener 
 
    public void joinGame() {
       try {
-         this.output.writeUTF("JOIN");
-         this.output.writeUTF(id);
+         this.output.writeUTF("JOIN " + this.id);
          this.output.flush();
+         this.game.join(this.id, this.player);
       } catch (IOException ex) {
          Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
       }
