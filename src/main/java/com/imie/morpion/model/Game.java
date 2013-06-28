@@ -53,9 +53,14 @@ public class Game {
       this.listeners.add(listener);
    }
 
-   public void notifAll() {
-      for (GameListener listener : this.listeners) {
-         listener.onViewChanged();
+   public void onSquaresUpdate() {
+      for(GameListener l : listeners) {
+         l.onSquaresUpdate();
+      }
+   }
+   public void onStateUpdate() {
+      for(GameListener l : listeners) {
+         l.onStateUpdate();
       }
    }
 
@@ -73,8 +78,8 @@ public class Game {
          squares[play.x][play.y] = player;
       }
 
+      this.onSquaresUpdate();
       calculateState();
-      this.notifAll();
    }
 
    private void calculateState() {
@@ -133,5 +138,7 @@ public class Game {
       } else {
          state = GameState.P1_TURN;
       }
+
+      this.onStateUpdate();
    }
 }

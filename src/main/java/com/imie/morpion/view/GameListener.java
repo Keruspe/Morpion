@@ -5,6 +5,6 @@ package com.imie.morpion.view;
  */
 
 public interface GameListener {
-
-   void onViewChanged();
+   void onSquaresUpdate();
+   void onStateUpdate();
 }
