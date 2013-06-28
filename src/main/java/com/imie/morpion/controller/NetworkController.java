@@ -3,7 +3,6 @@ package com.imie.morpion.controller;
 import com.imie.morpion.model.Game;
 import com.imie.morpion.model.Play;
 import com.imie.morpion.model.SquareState;
-import com.imie.morpion.view.GameListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
  */
 
-public abstract class NetworkController extends Thread implements BoardListener, GameListener {
+public abstract class NetworkController extends Thread implements BoardListener, EndGameListener {
 
    private Game game;
    private SquareState player;
@@ -31,7 +30,7 @@ public abstract class NetworkController extends Thread implements BoardListener,
 
    protected NetworkController(Game game, SquareState player, String id, Socket socket) throws IOException {
       this.game = game;
-      this.game.addGameListener(this);
+      this.game.addEndGameListener(this);
       this.player = player;
       this.id = id;
       this.socket = socket;
@@ -107,17 +106,12 @@ public abstract class NetworkController extends Thread implements BoardListener,
 
    @Override
    public void onClick(int x, int y) {
-      Logger.getAnonymousLogger().info(this.locked + "");
       if (!this.locked)
          play(x, y);
    }
 
    @Override
-   public void onStateUpdate(int scoreMe, int scoreOther) {
-      this.locked = this.player != SquareState.P1;
-   }
-
-   @Override
-   public void onSquaresUpdate(SquareState[][] squares) {
+   public void onGameEnd() {
+      this.locked = (this.player != SquareState.P1);
    }
 }

@@ -1,5 +1,6 @@
 package com.imie.morpion.model;
 
+import com.imie.morpion.controller.EndGameListener;
 import com.imie.morpion.view.GameListener;
 
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import java.util.Map;
 public class Game {
 
    public List<GameListener> listeners;
+   public List<EndGameListener> endListeners;
 
    private SquareState me;
 
@@ -27,6 +29,7 @@ public class Game {
 
    public Game(SquareState me) {
       this.listeners = new ArrayList<>();
+      this.endListeners = new ArrayList<>();
       this.players = new HashMap<>();
 
       this.me = me;
@@ -44,10 +47,21 @@ public class Game {
          squares[i / 3][i % 3] = SquareState.EMPTY;
       }
       this.onStateUpdate();
+      this.onEndGame();
    }
 
    public void addGameListener(GameListener listener) {
       this.listeners.add(listener);
+   }
+
+   public void addEndGameListener(EndGameListener listener) {
+      this.endListeners.add(listener);
+   }
+
+   public void onEndGame() {
+      for (EndGameListener l : this.endListeners) {
+         l.onGameEnd();
+      }
    }
 
    public void onSquaresUpdate() {
