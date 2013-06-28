@@ -21,11 +21,12 @@ public class App {
 
       boolean server = (args.length == 1 && args[0].compareTo("--server") == 0);
       final NetworkController nc = (server) ? new NetworkServer(game, id) : new NetworkClient(game, id);
-      nc.start();
-      nc.joinGame();
 
       Window window = new Window(game, nc, (server) ? "server" : "client");
       window.setVisible(true);
+
+      nc.start();
+      nc.joinGame();
       window.addWindowListener(new WindowAdapter() {
          public void windowClosing(WindowEvent winEvt) {
             nc.quit();
