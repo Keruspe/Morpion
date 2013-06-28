@@ -2,6 +2,7 @@ package com.imie.morpion.model;
 
 import com.imie.morpion.controller.ViewListener;
 import com.imie.morpion.exception.NonEmptySquareException;
+import com.imie.morpion.exception.WrongPlayerException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,8 +68,13 @@ public class Game {
    public void play(Play play) {
       if (squares[play.x][play.y].equals(SquareState.EMPTY)) {
          SquareState player = this.players.get(play.player);
-         // FIXME: check player matches state + game is not finished yet
-         squares[play.x][play.y] = player;
+         if(state.equals(GameState.P1_TURN) && player.equals(SquareState.P1)
+         || state.equals(GameState.P2_TURN) && player.equals(SquareState.P2)) {
+            squares[play.x][play.y] = player;
+         }
+         else {
+            throw new WrongPlayerException();
+         }
       } else {
          throw new NonEmptySquareException();
       }
