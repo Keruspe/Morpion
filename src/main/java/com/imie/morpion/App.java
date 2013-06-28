@@ -4,6 +4,7 @@ import com.imie.morpion.controller.NetworkClient;
 import com.imie.morpion.controller.NetworkController;
 import com.imie.morpion.controller.NetworkServer;
 import com.imie.morpion.model.Game;
+import com.imie.morpion.model.SquareState;
 import com.imie.morpion.view.Window;
 
 import java.awt.event.WindowAdapter;
@@ -22,7 +23,7 @@ public class App {
       Window window = new Window((server) ? "server" : "client");
       window.setVisible(true);
 
-      Game game = new Game();
+      Game game = new Game((server) ? SquareState.P1 : SquareState.P2);
       game.addGameListener(window);
       game.onStateUpdate();
 
