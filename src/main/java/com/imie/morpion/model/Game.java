@@ -1,11 +1,12 @@
 package com.imie.morpion.model;
 
 import com.imie.morpion.controller.ViewListener;
-import com.imie.morpion.exception.GameFinishedException;
 import com.imie.morpion.exception.NonEmptySquareException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Marc-Antoine Perennou<Marc-Antoine@Perennou.com>
@@ -15,14 +16,21 @@ public class Game {
 
    public List<ViewListener> listeners;
 
-   public int score1;
-   public int score2;
+   private int score1;
+   private int score2;
 
    private SquareState[][] squares;
    private GameState state;
 
+   private Map<String, SquareState> players;
+
    public Game() {
       this.listeners = new ArrayList<ViewListener>();
+      this.players = new HashMap<String, SquareState>();
+
+      /* FIXME: this is temporary */
+      this.players.put("server", SquareState.P1);
+      this.players.put("client", SquareState.P2);
 
       this.score1 = 0;
       this.score2 = 0;
@@ -38,6 +46,14 @@ public class Game {
       return this.squares;
    }
 
+   public int getScore1() {
+      return score1;
+   }
+
+   public int getScore2() {
+      return score2;
+   }
+
    public void subscribe(ViewListener listener) {
       this.listeners.add(listener);
    }
@@ -48,18 +64,11 @@ public class Game {
       }
    }
 
-   public void play(int x, int y) {
-      if (squares[x][y].equals(SquareState.EMPTY)) {
-         switch (state) {
-            case P1_TURN:
-               squares[x][y] = SquareState.P1;
-               break;
-            case P2_TURN:
-               squares[x][y] = SquareState.P2;
-               break;
-            default:
-               throw new GameFinishedException();
-         }
+   public void play(Play play) {
+      if (squares[play.x][play.y].equals(SquareState.EMPTY)) {
+         SquareState player = this.players.get(play.player);
+         // FIXME: check player matches state + game is not finished yet
+         squares[play.x][play.y] = player;
       } else {
          throw new NonEmptySquareException();
       }
