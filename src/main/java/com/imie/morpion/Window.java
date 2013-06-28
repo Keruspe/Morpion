@@ -45,4 +45,8 @@ public class Window extends JFrame {
          return false;
       }
    }
+
+   public void refresh(Game game) {
+
+   }
 }
