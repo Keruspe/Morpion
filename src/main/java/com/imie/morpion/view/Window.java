@@ -49,7 +49,8 @@ public class Window extends JFrame implements GameListener {
       this.board.addListener(boardListener);
       this.add(board);
 
-      this.refresh();
+      this.scores.refresh(this.game.getScore1(), this.game.getScore2());
+      this.board.refresh(this.game.getSquares());
    }
 
    private Boolean checkLookAndFeel(String name) {
@@ -64,12 +65,16 @@ public class Window extends JFrame implements GameListener {
    }
 
    public void refresh() {
-      this.scores.refresh(this.game.getScore1(), this.game.getScore2());
+
+   }
+
+   @Override
+   public void onSquaresUpdate() {
       this.board.refresh(this.game.getSquares());
    }
 
    @Override
-   public void onViewChanged() {
-      this.refresh();
+   public void onStateUpdate() {
+      this.scores.refresh(this.game.getScore1(), this.game.getScore2());
    }
 }
