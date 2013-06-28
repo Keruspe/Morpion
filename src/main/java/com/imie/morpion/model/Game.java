@@ -33,12 +33,17 @@ public class Game {
 
       this.scoreMe = 0;
       this.scoreOther = 0;
-      this.state = GameState.P1_TURN;
 
       squares = new SquareState[3][3];
+      reset();
+   }
+
+   public void reset() {
+      this.state = GameState.P1_TURN;
       for (int i = 0; i < 9; i++) {
          squares[i / 3][i % 3] = SquareState.EMPTY;
       }
+      this.onStateUpdate();
    }
 
    public void addGameListener(GameListener listener) {
@@ -71,8 +76,29 @@ public class Game {
          squares[play.x][play.y] = player;
       }
 
-      this.onSquaresUpdate();
       calculateState();
+
+      switch (state) {
+         case P1_WIN:
+            if (me == SquareState.P1)
+               scoreMe++;
+            else
+               scoreOther++;
+            reset();
+            break;
+         case P2_WIN:
+            if (me == SquareState.P2)
+               scoreMe++;
+            else
+               scoreOther++;
+            reset();
+            break;
+         case TIE:
+            reset();
+            break;
+      }
+
+      this.onSquaresUpdate();
    }
 
    private void calculateState() {
@@ -131,7 +157,5 @@ public class Game {
       } else {
          state = GameState.P1_TURN;
       }
-
-      this.onStateUpdate();
    }
 }
