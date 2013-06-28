@@ -1,5 +1,6 @@
 package com.imie.morpion.controller;
 
+import com.imie.morpion.model.Game;
 import com.imie.morpion.model.Play;
 
 import java.io.IOException;
@@ -16,11 +17,13 @@ import java.util.logging.Logger;
 
 public abstract class NetworkController extends Thread {
 
+   private Game game;
    private Socket socket;
    private InputStream input;
    private ObjectOutputStream output;
 
-   protected NetworkController(Socket socket) throws IOException {
+   protected NetworkController(Game game, Socket socket) throws IOException {
+      this.game = game;
       this.socket = socket;
       this.input = this.socket.getInputStream();
       this.output = new ObjectOutputStream(this.socket.getOutputStream());
@@ -37,6 +40,7 @@ public abstract class NetworkController extends Thread {
                Play play = null;
                try {
                   play = (Play) input.readObject();
+                  this.game.play(play);
                } catch (ClassNotFoundException ex) {
                   Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
                }
@@ -55,6 +59,7 @@ public abstract class NetworkController extends Thread {
          this.output.writeUTF("PLAY");
          this.output.writeObject(play);
          this.output.flush();
+         this.game.play(play);
          // TODO: lock
       } catch (IOException ex) {
          Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);

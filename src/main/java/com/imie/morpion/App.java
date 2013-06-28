@@ -12,11 +12,13 @@ import com.imie.morpion.view.Window;
 public class App {
 
    public static void main(String[] args) throws Exception {
+      Game game = new Game();
+
       boolean server = (args.length == 1 && args[0].compareTo("--server") == 0);
-      NetworkController nc = (server) ? new NetworkServer() : new NetworkClient();
+      NetworkController nc = (server) ? new NetworkServer(game) : new NetworkClient(game);
       nc.start();
 
-      Window window = new Window(new Game());
+      Window window = new Window(game);
       window.setVisible(true);
    }
 }
