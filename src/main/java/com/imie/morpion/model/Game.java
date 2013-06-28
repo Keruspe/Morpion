@@ -18,8 +18,8 @@ public class Game {
    public int score1;
    public int score2;
 
-   public SquareState[][] squares;
-   public GameState state;
+   private SquareState[][] squares;
+   private GameState state;
 
    public Game() {
       this.listeners = new ArrayList<ViewListener>();
@@ -32,6 +32,10 @@ public class Game {
       for (int i = 0; i < 9; i++) {
          squares[i / 3][i % 3] = SquareState.EMPTY;
       }
+   }
+
+   public SquareState[][] getSquares() {
+      return this.squares;
    }
 
    public void subscribe(ViewListener listener) {
@@ -61,6 +65,7 @@ public class Game {
       }
 
       calculateState();
+      this.notifAll();
    }
 
    private void calculateState() {

@@ -64,7 +64,7 @@ public class Window extends JFrame implements ViewListener {
 
    public void refresh() {
       this.scores.refresh(this.game.score1, this.game.score2);
-      this.board.refresh(this.game.squares);
+      this.board.refresh(this.game.getSquares());
    }
 
    @Override
