@@ -4,7 +4,6 @@ import com.imie.morpion.controller.NetworkClient;
 import com.imie.morpion.controller.NetworkController;
 import com.imie.morpion.controller.NetworkServer;
 import com.imie.morpion.model.Game;
-import com.imie.morpion.model.Play;
 import com.imie.morpion.view.Window;
 
 /**

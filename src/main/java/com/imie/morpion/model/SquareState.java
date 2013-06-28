@@ -8,17 +8,18 @@ package com.imie.morpion.model;
  * To change this template use File | Settings | File Templates.
  */
 public enum SquareState {
-    P1("O"),
-    P2("X"),
-    EMPTY("");
+   P1("O"),
+   P2("X"),
+   EMPTY("");
 
-    private String value;
-    private SquareState(String value) {
-        this.value = value;
-    }
+   private String value;
 
-    @Override
-    public String toString() {
-        return this.value;
-    }
+   private SquareState(String value) {
+      this.value = value;
+   }
+
+   @Override
+   public String toString() {
+      return this.value;
+   }
 }
