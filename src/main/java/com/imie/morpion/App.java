@@ -24,6 +24,7 @@ public class App {
 
       Game game = new Game();
       game.addGameListener(window);
+      game.onStateUpdate();
 
       final NetworkController nc = (server) ? new NetworkServer(game, id) : new NetworkClient(game, id);
       nc.start();

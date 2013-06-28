@@ -15,20 +15,24 @@ public class Game {
 
    public List<GameListener> listeners;
 
-   private int score1;
-   private int score2;
+   private SquareState me;
+
+   private int scoreMe;
+   private int scoreOther;
 
    private SquareState[][] squares;
    private GameState state;
 
    private Map<String, SquareState> players;
 
-   public Game() {
+   public Game(SquareState me) {
       this.listeners = new ArrayList<>();
       this.players = new HashMap<>();
 
-      this.score1 = 0;
-      this.score2 = 0;
+      this.me = me;
+
+      this.scoreMe = 0;
+      this.scoreOther = 0;
       this.state = GameState.P1_TURN;
 
       squares = new SquareState[3][3];
@@ -49,7 +53,7 @@ public class Game {
 
    public void onStateUpdate() {
       for (GameListener l : this.listeners) {
-         l.onStateUpdate(this.score1, this.score2);
+         l.onStateUpdate(this.scoreMe, this.scoreOther);
       }
    }
 

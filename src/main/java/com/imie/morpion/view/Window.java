@@ -66,7 +66,7 @@ public class Window extends JFrame implements GameListener {
    }
 
    @Override
-   public void onStateUpdate(int score1, int score2) {
-      this.scores.refresh(score1, score2);
+   public void onStateUpdate(int scoreMe, int scoreOther) {
+      this.scores.refresh(scoreMe, scoreOther);
    }
 }

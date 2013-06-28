@@ -1,6 +1,7 @@
 package com.imie.morpion.view;
 
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 /**
@@ -9,24 +10,26 @@ import java.awt.*;
 
 public class ScoresPanel extends JPanel {
 
-   private Label score1;
-   private Label score2;
+   private Label scoreMe;
+   private Label scoreOther;
 
    public ScoresPanel() {
       super();
-      this.setPreferredSize(new Dimension(300, 30));
+      this.setPreferredSize(new Dimension(310, 50));
+      this.setBorder(LineBorder.createGrayLineBorder());
       this.add(createToolbar());
    }
 
    private JToolBar createToolbar() {
       ScoresToolBar toolbar = new ScoresToolBar();
-      this.score1 = toolbar.addPlayer("Me");
-      this.score2 = toolbar.addPlayer("Other");
+      this.scoreMe = toolbar.addPlayer("Me");
+      toolbar.addSeparator();
+      this.scoreOther = toolbar.addPlayer("Other");
       return toolbar;
    }
 
-   public void refresh(int score1, int score2) {
-      this.score1.setText(score1 + "");
-      this.score2.setText(score2 + "");
+   public void refresh(int scoreMe, int scoreOther) {
+      this.scoreMe.setText(scoreMe + "");
+      this.scoreOther.setText(scoreOther + "");
    }
 }
