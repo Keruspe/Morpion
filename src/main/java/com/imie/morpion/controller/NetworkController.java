@@ -26,6 +26,8 @@ public abstract class NetworkController extends Thread implements BoardListener 
    private InputStream input;
    private ObjectOutputStream output;
 
+   protected boolean locked;
+
    protected NetworkController(Game game, SquareState player, String id, Socket socket) throws IOException {
       this.game = game;
       this.player = player;
@@ -33,6 +35,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
       this.socket = socket;
       this.input = this.socket.getInputStream();
       this.output = new ObjectOutputStream(this.socket.getOutputStream());
+      this.locked = false;
    }
 
    @Override
@@ -43,7 +46,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
          while (this.socket.isConnected()) {
             line = input.readUTF();
             if (line.startsWith("JOIN")) {
-               this.game.join(line.split(" ")[1], this.player.getOtherPlayer());
+               this.game.join(input.readUTF(), this.player.getOtherPlayer());
             } else if (line.startsWith("PLAY")) {
                Play play = null;
                try {
@@ -52,7 +55,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
                } catch (ClassNotFoundException ex) {
                   Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
                }
-               // TODO: apply + unlock
+               this.locked = false;
             } else if (line.startsWith("BYE")) {
                this.socket.close();
             }
@@ -66,7 +69,8 @@ public abstract class NetworkController extends Thread implements BoardListener 
 
    public void joinGame() {
       try {
-         this.output.writeUTF("JOIN " + this.id);
+         this.output.writeUTF("JOIN");
+         this.output.writeUTF(this.id);
          this.output.flush();
          this.game.join(this.id, this.player);
       } catch (IOException ex) {
@@ -81,7 +85,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
          this.output.writeObject(play);
          this.output.flush();
          this.game.play(play);
-         // TODO: lock
+         this.locked = true;
       } catch (IOException ex) {
          Logger.getLogger(NetworkController.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -101,6 +105,7 @@ public abstract class NetworkController extends Thread implements BoardListener 
 
    @Override
    public void onClick(int x, int y) {
-      play(x, y);
+      if (!this.locked)
+         play(x, y);
    }
 }
